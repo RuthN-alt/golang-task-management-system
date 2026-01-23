@@ -18,6 +18,7 @@ func ConnectToDB() {
 	dbPassword := os.Getenv("DB_PASSWORD")
 	dbName := os.Getenv("DB_NAME")
 
+	// Check that all environment variables are set
 	if dbHost == "" || dbPort == "" || dbUser == "" || dbPassword == "" || dbName == "" {
 		log.Fatal("Database environment variables are not set")
 	}
