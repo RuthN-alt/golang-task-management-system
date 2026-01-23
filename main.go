@@ -1,6 +1,7 @@
 package main
 
 import (
+	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -10,10 +11,7 @@ import (
 )
 
 func init() {
-	// Load env variables from Railway or .env
-	initializers.LoadEnvVariables()
-
-	// Connect to PostgreSQL
+	// Connect to PostgreSQL using Railway-provided environment variables
 	initializers.ConnectToDB()
 
 	// Sync database models
@@ -34,11 +32,13 @@ func main() {
 	routers.UserRoutes(r)
 	routers.TaskRoutes(r)
 
-	// Listen on PORT from environment (Railway sets this)
+	// Listen on PORT from Railway environment
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "3000"
+		log.Fatal("PORT environment variable is not set")
 	}
 
-	r.Run(":" + port)
+	if err := r.Run(":" + port); err != nil {
+		log.Fatal("Failed to start server:", err)
+	}
 }
